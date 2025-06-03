@@ -1,7 +1,10 @@
+package src.metier.mpm;
+
+import src.metier.DateFr;
 
 import iut.algo.Clavier;
 
-import java.io.File;
+import java.io.FileInputStream;
 import java.util.Scanner;
 
 import java.util.List;
@@ -96,7 +99,7 @@ public class MPM
 
 		try 
 		{
-			scFic = new Scanner ( new File( "test.data" ), "UTF-8" );
+			scFic = new Scanner ( new FileInputStream( "../application/src/data/test.data" ), "UTF-8" );
 			
 			while ( scFic.hasNextLine() )
 			{

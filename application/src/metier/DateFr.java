@@ -1,4 +1,4 @@
-package application.metier;
+package src.metier;
 
 import java.util.GregorianCalendar;
 
@@ -49,9 +49,9 @@ public class DateFr extends GregorianCalendar
 		this ( autreDate.get( DateFr.DAY     ),
 			   autreDate.get( DateFr.MONTH   ),
 			   autreDate.get( DateFr.YEAR    ),
-               autreDate.get( DateFr.HOUR    ),
-               autreDate.get( DateFr.MINUTE  ),
-               autreDate.get( DateFr.SECOND  ) );
+			   autreDate.get( DateFr.HOUR    ),
+			   autreDate.get( DateFr.MINUTE  ),
+			   autreDate.get( DateFr.SECOND  ) );
 	}
 
 
@@ -65,7 +65,7 @@ public class DateFr extends GregorianCalendar
 		switch ( field ) 
 		{
 			case  DateFr.YEAR  , DateFr.MINUTE, 
-			      DateFr.SECOND, DateFr.WEEK_OF_YEAR -> iRet = super.get( field );
+				  DateFr.SECOND, DateFr.WEEK_OF_YEAR -> iRet = super.get( field );
 			
 			case  DateFr.DAY                         -> iRet = super.get( DateFr.DAY_OF_MONTH );
 
@@ -175,21 +175,29 @@ public class DateFr extends GregorianCalendar
 	public String toString()
 	{
 		return String.format( "%02d", this.get ( DateFr.DAY    ) ) + "/" +
-		       String.format( "%02d", this.get ( DateFr.MONTH  ) ) + "/" +
-		       String.format( "%4d" , this.get ( DateFr.YEAR   ) ) + " " +
-		       String.format( "%02d", this.get ( DateFr.HOUR   ) ) + ":" +
-		       String.format( "%02d", this.get ( DateFr.MINUTE ) ) + ":" +
-		       String.format( "%02d", this.get ( DateFr.SECOND ) ) ;
+			   String.format( "%02d", this.get ( DateFr.MONTH  ) ) + "/" +
+			   String.format( "%4d" , this.get ( DateFr.YEAR   ) ) + " " +
+			   String.format( "%02d", this.get ( DateFr.HOUR   ) ) + ":" +
+			   String.format( "%02d", this.get ( DateFr.MINUTE ) ) + ":" +
+			   String.format( "%02d", this.get ( DateFr.SECOND ) ) ;
 	}
 
-	public String toString ( int nbJourSup )
+	public String toString ( char dateRef, int nbJourSup, int nbJourMax )
 	{
-		DateFr datePlus = new DateFr( this );
-		datePlus.add( DateFr.DAY_OF_MONTH, nbJourSup );
+		DateFr dateModifiee = new DateFr( this );
 
-		return String.format( "%02d", datePlus.get ( DateFr.DAY    ) ) + "/" +
-		       String.format( "%02d", datePlus.get ( DateFr.MONTH  ) ) + "/" +
-		       String.format( "%4d" , datePlus.get ( DateFr.YEAR   ) ) + " " ;
+		if ( dateRef == 'D' ) 
+		{
+			dateModifiee.add( DateFr.DAY_OF_MONTH, nbJourSup );
+		} 
+		else 
+		{
+			dateModifiee.add( DateFr.DAY_OF_MONTH, nbJourSup - nbJourMax );
+		}
+
+		return String.format( "%02d", dateModifiee.get ( DateFr.DAY    ) ) + "/" +
+			   String.format( "%02d", dateModifiee.get ( DateFr.MONTH  ) ) + "/" +
+			   String.format( "%4d" , dateModifiee.get ( DateFr.YEAR   ) ) + " " ;
 	}
 
 	public String toString(String format) 
@@ -224,7 +232,7 @@ public class DateFr extends GregorianCalendar
 		format = format.replace( "mn"  , String.format( "%02d", this.get( DateFr.MINUTE  ) ) );
 		format = format.replace( "sc"  , String.format( "%02d", this.get( DateFr.SECOND  ) ) );
 
-	    return format;
+		return format;
 	}
 
 

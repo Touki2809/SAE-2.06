@@ -1,9 +1,17 @@
 import javax.swing.*;
+
+import java.awt.event.*;
+import java.awt.event.*;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import javax.swing.border.LineBorder;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Color;
+
+import java.util.*;
 
 
 public class PanelTache extends JPanel
@@ -19,7 +27,7 @@ public class PanelTache extends JPanel
 	private JLabel     lblDteTot;
 	private JLabel     lblDteTard;
 
-
+	
 	public PanelTache( Controleur ctrl, FrameMPM frame, Tache tache )
 	{
 		this.ctrl  = ctrl;
@@ -36,11 +44,12 @@ public class PanelTache extends JPanel
 		this.lblDteTot  = new JLabel( tache.getDte_tot () +"", SwingConstants.CENTER );
 		this.lblDteTard = new JLabel( tache.getDte_tard() +"", SwingConstants.CENTER );
 
-		this.lblTitre  .setBorder( new LineBorder( Color.BLACK, 1 ) ); 		
+		this.lblTitre  .setBorder( new LineBorder( Color.BLACK, 1 ) );
 		this.lblDteTot .setBorder( new LineBorder( Color.BLACK, 1 ) );
 		this.lblDteTard.setBorder( new LineBorder( Color.BLACK, 1 ) );
 
 		panelDate = new JPanel( new GridLayout( 1, 2 ) );
+		this.setPreferredSize( new Dimension(50,50) );
 
 		/* ----------------------------- */
 		/* Positionnement des composants */
@@ -48,13 +57,40 @@ public class PanelTache extends JPanel
 		this.add( this.lblTitre );
 		this.add( panelDate     );
 		panelDate.add( this.lblDteTot  );
-		panelDate.add( this.lblDteTard );		
+		panelDate.add( this.lblDteTard );
 
 		
 		/* ------------------------------ */
 		/* Activation des composants      */
 		/* ------------------------------ */
-
+		
 		
 	}
+
+	public Tache  getTache() { return this.tache          ; }
+	
+
+	/* ------------------------------ */
+	/* Gestion souris, class interne  */
+	/* ------------------------------ */
+	private class GereSouris extends MouseAdapter
+	{
+		int     posX, posY;
+
+		public void mousePressed (MouseEvent e)
+		{
+			this.posX = e.getX();
+			this.posY = e.getY();
+		}
+
+		public void mouseDragged (MouseEvent e)
+		{
+			PanelTache.this.frame.deplacerFigure ( PanelTache.this.tache, e.getX()-this.posX, e.getY()-this.posY );
+
+			this.posX = e.getX();
+			this.posY = e.getY();
+					
+		}
+	}
+
 }

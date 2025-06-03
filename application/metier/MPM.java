@@ -1,7 +1,5 @@
 package application.metier;
 
-import iut.algo.Clavier;
-
 import java.io.File;
 import java.util.Scanner;
 
@@ -18,8 +16,7 @@ public class MPM
 	/*-------------------------------*/
 	/* Attributs                     */
 	/*-------------------------------*/
-	private char                 dateRef;
-	private DateFr               dateInit; 
+	private DateFr               D; //date de début du projet
 
 	private List<Tache>          ensTaches;
 	//private List<CheminCritique> ensCheminCritiques;
@@ -28,10 +25,9 @@ public class MPM
 	/*-------------------------------*/
 	/* Constructeur                  */
 	/*-------------------------------*/
-	public MPM( char dateRef, DateFr dateInit )
+	public MPM()
 	{
-		this.dateRef  = dateRef;
-		this.dateInit = new DateFr( dateInit ); 
+		this.D = new DateFr( 1, 6, 2025 ); // date de début du projet
 
 		this.ensTaches          = new ArrayList<Tache>         ();
 		//this.ensCheminCritiques = new ArrayList<CheminCritique>();
@@ -43,10 +39,8 @@ public class MPM
 	/*-------------------------------*/
 	/* Accesseurs                    */
 	/*-------------------------------*/
-	public char                 getFlagDate  ()     { return this.dateRef;              }
-	public DateFr               getDate      ()     { return this.dateInit;             }
-	public List<Tache>          getListTache ()     { return this.ensTaches ;           }
-	public Tache                getTache(int index) { return this.ensTaches.get(index); }
+	public DateFr          getDateDebut (){ return this.D; }
+	public List<Tache>     getListTache (){ return this.ensTaches ; }
 	//public List<CheminCritique> getListChemin(){ return this.ensCheminCritiques; }
 
 
@@ -123,10 +117,8 @@ public class MPM
 	{
 		String sRet = "";
 
-		int nbJourMax = this.getTache( this.ensTaches.size() -1 ).getDte_tard();
-
 		for ( Tache t : this.ensTaches )
-			sRet += t.toString( this.getFlagDate(), this.getDate(), nbJourMax ) + "\n";
+			sRet += t.toString( this.getDateDebut() ) + "\n";
 		
 			return sRet;
 	}
@@ -136,23 +128,7 @@ public class MPM
 	/*-------------------*/
 	public static void main(String[] args)
 	{
-		DateFr dateInit;
-		char   dateRef;
-
-
-		//Saisie 
-		System.out.println("Veuillez entrer votre choix :");
-		System.out.println("D - Date de début"            );
-		System.out.println("F - Date de fin"              );
-		System.out.print  ("Votre choix (D/F) : "         );
-		dateRef = Clavier.lire_char();
-
-		System.out.print("Veuillez entrer la date  (format jj/mm/aaaa) : ");
-		dateInit = new DateFr( Clavier.lireString() );
-
-
-
-		MPM mpm = new MPM( dateRef, dateInit );
+		MPM mpm = new MPM();
 
 		System.out.println( mpm );
 	}
