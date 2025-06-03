@@ -1,6 +1,4 @@
-package src.metier.mpm;
-
-import src.metier.DateFr;
+package src.metier;
 
 import java.util.List;
 import java.util.ArrayList;

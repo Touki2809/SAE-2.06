@@ -1,10 +1,8 @@
-package src.metier.mpm;
-
-import src.metier.DateFr;
+package src.metier;
 
 import iut.algo.Clavier;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.util.Scanner;
 
 import java.util.List;
@@ -25,7 +23,7 @@ public class MPM
 	private static DateFr        dateInit; 
 
 	private List<Tache>          ensTaches;
-	//private List<CheminCritique> ensCheminCritiques;
+	private List<CheminCritique> ensCheminCritiques;
 
 
 	/*-------------------------------*/
@@ -37,31 +35,37 @@ public class MPM
 		MPM.dateInit = new DateFr( dateInit ); 
 
 		this.ensTaches          = new ArrayList<Tache>         ();
-		//this.ensCheminCritiques = new ArrayList<CheminCritique>();
+		this.ensCheminCritiques = new ArrayList<CheminCritique>();
 
 		this.initMpm();
-		this.initDteTot();
-		this.initDteTard();
+		// this.initDteTot();
+		// this.initDteTard();
 		this.intiNiveau();
+
 	}
 
 
 	/*-------------------------------*/
 	/* Accesseurs                    */
 	/*-------------------------------*/
-	public char                 getFlagDate  ()     { return this.dateRef;              }
-	public DateFr               getDate      ()     { return this.dateInit;             }
+	public static char          getFlagDate  ()     { return MPM.dateRef; }
+	public static DateFr        getDate      ()     { return MPM.dateInit; }
 	public List<Tache>          getListTache ()     { return this.ensTaches ;           }
 	public Tache                getTache(int index) { return this.ensTaches.get(index); }
-	//public List<CheminCritique> getListChemin(){ return this.ensCheminCritiques; }
+	public List<CheminCritique> getListCheminCritique() {
+        return this.ensCheminCritiques;
+    }
 
 
+	/*-------------------------------*/
+	/* Méthodes                      */
+	/*-------------------------------*/
 	public int calculerNiveau( Tache tache ) 
 	{
 		//Déja def ?
 		if ( tache.getNiveau() != -1 ) return tache.getNiveau();
 
-		if ( tache.getNom().equals( "DÉBUT" ) ) return 0;
+		if ( tache.getNom().equals( "DÉBUT" ) ) { tache.setNiveau( 0 ); return 0; }
 
 		// DÉBUT  ?
 		if ( tache.getNbPrc() == 0 ) tache .setNiveau( 0 );
@@ -83,6 +87,80 @@ public class MPM
 		return niveau;
 	}	
 
+	public void calculerDateNiveauTot(int niveau)
+	{
+		for ( Tache t : this.ensTaches )
+		{
+			if ( t.getNiveau() == niveau ) 
+			{
+				int max = 0;
+				for ( Tache tPrc : t.getlstPrc() ) 
+				{
+					if ( tPrc.getDte_tot() + tPrc.getDuree() > max )
+						max = tPrc.getDte_tot() + tPrc.getDuree();
+				}
+
+				t.setDteTot( max );
+			}
+		}
+	}
+
+	public void calculerDateNiveauTard(int niveau) 
+	{
+		for (Tache t : this.ensTaches) 
+		{
+			if ( t.getNiveau() == niveau ) 
+			{
+				int min = 10000;
+				for ( Tache tPrc : t.getlstSvt() ) 
+				{
+					if ( tPrc.getDte_tard() - t.getDuree() < min )
+						min = tPrc.getDte_tard() - t.getDuree();
+				}
+
+				if ( min == 10000 ) t.setDteTard(t.getDte_tot());
+				else                t.setDteTard( min );
+			}
+		}
+	}
+
+
+	public void calculerCheminCritique()
+    {
+        List<CheminCritique> pileChemin = new ArrayList<CheminCritique>();
+        Tache                tacheActu  = this.ensTaches.get(0);
+        CheminCritique       cheminActu = new CheminCritique();
+        
+        pileChemin.add(cheminActu);
+        cheminActu.ajouterTache(tacheActu);
+        
+        while (!pileChemin.isEmpty())
+        {
+            if (tacheActu.getNbSvt()!= 0)
+            {
+                for ( Tache t : tacheActu.getlstSvt() )
+                {
+                    if(t.calculerMarge() == 0)
+                    {
+                        pileChemin.remove(cheminActu);
+                        CheminCritique cheminTmp = new CheminCritique(cheminActu);
+                        cheminTmp.ajouterTache(t);
+                        pileChemin.add(cheminTmp);
+                    }
+                }
+            }
+            else
+            {
+                this.ensCheminCritiques.add(cheminActu);
+                pileChemin.remove(cheminActu);
+            }
+            
+            if (!pileChemin.isEmpty()) cheminActu = pileChemin.get(pileChemin.size()-1);
+            if (!cheminActu.getCheminCritique().isEmpty())
+                tacheActu  = cheminActu.getCheminCritique().get(cheminActu.getCheminCritique().size()-1);
+        }
+        
+    }
 
 	/*-------------------------------*/
 	/* INITIALISATION                */
@@ -96,10 +174,9 @@ public class MPM
 		Scanner  scFic;
 
 		this.ensTaches.add ( new Tache( "DÉBUT", 0, 0 ) );
-
 		try 
 		{
-			scFic = new Scanner ( new FileInputStream( "../application/src/data/test.data" ), "UTF-8" );
+			scFic = new Scanner ( new File( "../data/test_long.data" ), "UTF-8" );
 			
 			while ( scFic.hasNextLine() )
 			{
@@ -113,7 +190,7 @@ public class MPM
 				// Ajout de la tache 
 				this.ensTaches.add(tache);
 
-				// a des precedents ?
+				// precedents ?
 				if ( ligne.length > 2 && !ligne[2].trim().isEmpty() )
 				{
 					String[] precedences = ligne[2].split(",");
@@ -121,6 +198,10 @@ public class MPM
 					for (String prec : precedences)
 						for ( Tache t : this.ensTaches )
 							if ( t.getNom().equals( prec.trim() ) ) tache.ajouterPrc( t );
+				}
+				else
+				{
+					tache.ajouterPrc( this.ensTaches.get(0) );
 				}
 				
 			}
@@ -173,6 +254,9 @@ public class MPM
 			this.calculerNiveau( t );
 	}
 
+
+	
+
 	/*-------------------*/
 	/* toString          */
 	/*-------------------*/
@@ -183,7 +267,7 @@ public class MPM
 		int nbJourMax = this.getTache( this.ensTaches.size() -1 ).getDte_tard();
 
 		for ( Tache t : this.ensTaches )
-			sRet += t.toString( this.getFlagDate(), this.getDate(), nbJourMax ) + "\n";
+			sRet += t.toString( MPM.getFlagDate(), MPM.getDate(), nbJourMax ) + "\n";
 		
 		return sRet;
 	}

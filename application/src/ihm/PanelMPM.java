@@ -1,18 +1,14 @@
 package src.ihm;
 
 import src.Controleur;
-import src.metier.mpm.*;
-import src.metier.dessin.*;
-import src.metier.dessin.Rectangle;
-import src.metier.*;
-
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import src.metier.Tache;
+import src.metier.CheminCritique;
 
 import javax.swing.*;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -25,122 +21,175 @@ public class PanelMPM extends JPanel
 	/*-------------------------------*/
 	/* Composants                    */
 	/*-------------------------------*/
-	private Controleur       ctrl;
-	private FrameMPM         frame;
-	private Graphics2D g2;
-
+	private Controleur        ctrl;
+	private FrameMPM          frame;
 	
+	private List<List<Tache>> tachesParNiveau = new ArrayList<>();
+	private List<PanelTache>  lstPanelTache;
+	private List<Lien>        lstLien;
+
+	private Graphics2D        g2;
 
 	public PanelMPM( Controleur ctrl, FrameMPM frame)
 	{
 		this.ctrl     = ctrl;
 		this.frame    = frame;
+
 		this.setLayout(null);
-		
+
 		/*-------------------------------*/
 		/* Création des composants       */
 		/*-------------------------------*/
-		this.initFigures();
-	}
-
-	/*-------------------------------*/
-	/* Paint                         */
-	/*-------------------------------*/
-	public void paintComponent(Graphics g)
-	{
-		Figure fig;
-
-		super.paintComponent(g);
-
-		g2 = (Graphics2D) g;
 		
-				
-		// Dessiner l'ensemble des figures
-		for ( int cptFigure=0; cptFigure<this.ctrl.getNbFigure(); cptFigure++)
-		{
-			fig = this.ctrl.getFigure(cptFigure);
+		//---
+		// PanelTache
+		//---
+		this.lstPanelTache = new ArrayList<PanelTache>();
 
-			if ( fig instanceof Rectangle)
+		// Récupérer la liste des tâches
+		List<Tache> lstTaches = this.ctrl.getGraphe().getListTache();
+
+		// Déterminer le niveau de chaque tâche
+		// Regrouper les tâches par niveau
+		int maxNiveau = 0;
+		for (Tache t : lstTaches) 
+		{
+			if (t.getNiveau() > maxNiveau)
+				maxNiveau = t.getNiveau();
+		}
+
+		// Tache rangée par niveau
+		this. tachesParNiveau = new ArrayList<>();
+		for (int cptNv = 0; cptNv <= maxNiveau; cptNv++) 
+			tachesParNiveau.add( new ArrayList<>() );
+		
+		for (Tache t : lstTaches) 
+		{
+			if ( t.getNiveau()  >= 0)  
 			{
-				int x = fig.getCentreX() - fig.getTailleX()/2;
-				int y = fig.getCentreY() - fig.getTailleY()/2;
-				int w = fig.getTailleX();
-				int h = fig.getTailleY();
-
-				// Rectangle principal
-				g2.drawRect(x, y, w, h);
-
-				// Ligne horizontale sous le nom (à 1/3 de la hauteur)
-				int yH = y + h/3;
-				g2.drawLine(x, yH, x + w, yH);
-
-				// Ligne verticale au centre (pour séparer dt1/dt2)
-				int xV = x + w/2;
-				g2.drawLine(xV, yH, xV, y + h);
-
-				// Nom centré dans la partie haute
-				String nom = fig.getTache().getNom();
-				int nomWidth = g2.getFontMetrics().stringWidth(nom);
-				g2.drawString(nom, x + (w-nomWidth)/2, y + h/6 + g2.getFontMetrics().getAscent()/2);
-
-				// dt1 à gauche, dt2 à droite, centrés verticalement dans la partie basse
-				String dt1 = String.valueOf( fig.getTache().getDte_tot () );
-				String dt2 = String.valueOf( fig.getTache().getDte_tard() );
-				int dtY = yH + (2*h/3 + g2.getFontMetrics().getAscent())/2 - h/6;
-
-				int dt1Width = g2.getFontMetrics().stringWidth(dt1);
-				int dt2Width = g2.getFontMetrics().stringWidth(dt2);
-
-				g2.drawString(dt1, x + (w/4) - dt1Width/2, dtY);
-				g2.drawString(dt2, x + (3*w/4) - dt2Width/2, dtY);
-			}
-			
-		}
-	}
-
-
-	/*-------------------------------*/
-	/* Initialisation des figures     */
-	/*-------------------------------*/
-	public void initFigures()
-	{
-		// On ajoute les figures du graphe MPM
-		for ( int cptTache=0; cptTache<this.ctrl.getNbTaches(); cptTache++)
-		{
-			Tache t = this.ctrl.getTache( cptTache );
-
-			//	public Rectangle ( Tache tache, int centreX, int centreY, int tailleX, int tailleY )
-			//                                  
-			
-		}
-	}
-
-	/*-----------------------------------------*/
-	/* Définition de la classe interne Adapter */
-	/*-----------------------------------------*/
-	private class GereSouris extends MouseAdapter
-	{
-		Integer numFigure;
-		int     posX, posY;
-
-		public void mousePressed (MouseEvent e)
-		{
-			this.numFigure = PanelMPM.this.ctrl.getIndiceFigure ( e.getX(), e.getY() );
-			this.posX = e.getX();
-			this.posY = e.getY();
-		}
-
-		public void mouseDragged (MouseEvent e)
-		{
-			if ( this.numFigure != null )
-			{
-				PanelMPM.this.ctrl.deplacerFigure( this.numFigure, e.getX()-this.posX, e.getY()-this.posY );
-
-				this.posX = e.getX();
-				this.posY = e.getY();
-				
-				PanelMPM.this.repaint();
+				tachesParNiveau.get( t.getNiveau() ).add(t);
 			}
 		}
+
+		//--- 
+		// Placement simple des panels de tâches 
+		//--- 
+		int panelDim = 40;
+		int hGap     = 60;
+		int vGap     = 60;
+
+		for (int niveau = 0; niveau <= maxNiveau; niveau++) 
+		{
+			List<Tache> tachesNiveau = tachesParNiveau.get( niveau );
+			int         nbTache      = tachesNiveau.size();
+
+			// 
+			int totalH  = nbTache * panelDim + ( nbTache - 1 ) * vGap;
+			int centreY = ( this.frame.getHeight() - totalH ) / 2;
+			int x       = 50 + niveau * ( panelDim + hGap );
+
+			// Placement 
+			for ( int cptT = 0; cptT < nbTache; cptT++ ) 
+			{
+				Tache tache = tachesNiveau.get( cptT );
+				int       y = centreY + cptT * ( panelDim + vGap );
+
+				PanelTache panelTache = new PanelTache( this.ctrl, this.frame, tache );
+				panelTache.setBounds( x, y, panelDim, panelDim );
+
+				this.lstPanelTache.add( panelTache );
+				
+			}
+		}
+
+
+		//---
+		// Lien entre les tâches
+		//---
+		this.lstLien = new ArrayList<>();
+		for (PanelTache panelTache : this.lstPanelTache) 
+		{
+			Tache tache = panelTache.getTache();
+			for (Tache tacheSvt : tache.getlstSvt()) 
+			{
+				for ( PanelTache panelSvt : this.lstPanelTache  ) 
+				{
+					if ( panelSvt.getTache().equals( tacheSvt ) ) 
+					{
+						this.lstLien.add(new Lien( panelTache, 
+												   panelSvt  , 
+												   tacheSvt.getDuree()  ) );
+					}
+				}
+			}
+		}
+
+		/*--------------------------------*/
+		/* Positionnement des composants  */
+		/*--------------------------------*/
+		for (PanelTache panelTache : this.lstPanelTache) 
+		{
+			this.add( panelTache );
+		}
+		
+		// Permet au JScrollPane de défiler correctement selon la taille du graphe
+        this.setPreferredSize(new java.awt.Dimension(2000, 1000));
 	}
+
+	/*-------------------------------*/
+	/* Accesseurs                    */
+	/*-------------------------------*/
+	public List<PanelTache>  getLstPanelTache   () { return this.lstPanelTache;   }
+	public List<List<Tache>> getTachesParNiveau () { return this.tachesParNiveau; }
+	public List<Lien>        getLstLien         () { return this.lstLien;         }
+
+	/*-------------------------------*/
+	/*     PAINT                     */
+	/*-------------------------------*/
+	protected void paintComponent( Graphics g ) 
+	{
+		super.paintComponent(g);
+		
+		if ( this.lstLien != null && ! this.lstLien.isEmpty() ) 
+		{
+			this.g2 = (Graphics2D) g;
+			for (Lien lien : this.lstLien) 
+			{
+				boolean crit1 = lien.getTachePrc().isCritique();
+				boolean crit2 = lien.getTacheSvt().isCritique();
+
+				Color couleur = Color.BLACK;
+				if ( crit1 && crit2 )  couleur = Color.RED;
+
+				lien.dessiner(this.g2, couleur, this.frame.getBackground());
+			}
+		}
+	}
+
+	public void maj() {
+		for (PanelTache pt : this.lstPanelTache) {
+			pt.majAffichage();
+		}
+		this.repaint();
+	}
+
+    public void afficherCheminCritique()
+    {
+        List<CheminCritique> lstChemins = this.ctrl.getGraphe().getListCheminCritique();
+        for ( PanelTache p : this.lstPanelTache )
+        {
+            boolean estCritique = false;
+            for (CheminCritique chemin : lstChemins)
+            {
+                if (chemin.getCheminCritique().contains(p.getTache()))
+                {
+                    estCritique = true;
+                    break;
+                }
+            }
+            p.setCritique(estCritique);
+        }
+		
+        this.repaint();
+    }
 }

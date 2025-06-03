@@ -1,13 +1,11 @@
-./src/metier/dessin/Figure.java
-./src/metier/dessin/Metier.java
-./src/metier/dessin/Rectangle.java
-
-./src/metier/mpm/MPM.java
-./src/metier/mpm/Tache.java
-
+./src/metier/Tache.java
 ./src/metier/DateFr.java
+./src/metier/CheminCritique.java
+./src/metier/MPM.java
 
-./src/ihm/FrameMPM.java
+./src/ihm/PanelTache.java
+./src/ihm/Lien.java
 ./src/ihm/PanelMPM.java
+./src/ihm/FrameMPM.java
 
 ./src/Controleur.java
