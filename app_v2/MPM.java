@@ -15,8 +15,8 @@ public class MPM
 	/*-------------------------------*/
 	/* Attributs                     */
 	/*-------------------------------*/
-	private char                 dateRef;
-	private DateFr               dateInit; 
+	private static char          dateRef;
+	private static DateFr        dateInit; 
 
 	private List<Tache>          ensTaches;
 	//private List<CheminCritique> ensCheminCritiques;
@@ -27,13 +27,16 @@ public class MPM
 	/*-------------------------------*/
 	public MPM( char dateRef, DateFr dateInit )
 	{
-		this.dateRef  = dateRef;
-		this.dateInit = new DateFr( dateInit ); 
+		MPM.dateRef  = dateRef;
+		MPM.dateInit = new DateFr( dateInit ); 
 
 		this.ensTaches          = new ArrayList<Tache>         ();
 		//this.ensCheminCritiques = new ArrayList<CheminCritique>();
 
 		this.initMpm();
+		this.initDteTot();
+		this.initDteTard();
+
 	}
 
 
@@ -58,7 +61,9 @@ public class MPM
 		int      duree;
 		Tache    tache;
 		Scanner  scFic;
-		
+
+		this.ensTaches.add ( new Tache( "DÉBUT", 0, 0 ) );
+
 		try 
 		{
 			scFic = new Scanner ( new File( "test.data" ), "UTF-8" );
@@ -89,29 +94,45 @@ public class MPM
 
 		} catch (Exception e) { e.printStackTrace(); }
 
-		// Appel de dateMin 
-		for ( int cpt =0 ; cpt < this.ensTaches.size(); cpt++ )
-		{
-			Tache t = this.ensTaches.get(cpt);
-			
-			t.dateMin();
-		}
-
-
-		Tache fin = this.ensTaches.get(this.ensTaches.size()-1);
-		fin.setDteTard(fin.getDte_tot());
-
-
-		// Appel de dateTard 
-		for ( int cpt =this.ensTaches.size()-2 ; cpt >= 0 ; cpt-- )
-		{
-			Tache t = this.ensTaches.get(cpt);
-			
-			t.dateTard();
-		}
-
+		this.ensTaches.add ( new Tache( "FIN", 0 ) );
+		this.ensTaches.get( this.ensTaches.size()-1 ).ajouterPrc( this.ensTaches.get( this.ensTaches.size()-2 ));
 	}
 
+	public void initDteTot()
+	{
+		Tache tSvt;
+		
+		for ( Tache t : this.ensTaches )
+		{
+			for ( int cpt=0; cpt<t.getNbSvt(); cpt++)
+			{
+				tSvt = t.getlstSvt().get( cpt );
+
+				tSvt.setDateTot( (t.getDte_tot() +  t.getDuree()) );
+			}
+		}
+	}
+	
+	public void initDteTard()
+	{
+		Tache t,tPrc;
+
+		t = this.ensTaches.get(this.ensTaches.size() -1);
+
+		t.setDateTard( t.getDte_tot() );
+
+		for(int cpt = this.ensTaches.size() -1; cpt >= 0 ; cpt--)
+		{
+			t = this.ensTaches.get(cpt);
+
+			for(int cptT= 0; cptT < t.getNbPrc(); cptT++)
+			{
+				tPrc = t.getlstPrc().get(cptT);
+
+				tPrc.setDateTard( t.getDte_tard() - tPrc.getDuree() );
+			}
+		}
+	}
 	
 	/*-------------------*/
 	/* toString          */
@@ -125,7 +146,7 @@ public class MPM
 		for ( Tache t : this.ensTaches )
 			sRet += t.toString( this.getFlagDate(), this.getDate(), nbJourMax ) + "\n";
 		
-			return sRet;
+		return sRet;
 	}
 
 	/*-------------------*/

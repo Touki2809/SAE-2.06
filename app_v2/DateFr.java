@@ -183,7 +183,7 @@ public class DateFr extends GregorianCalendar
 	public String toString ( char dateRef, int nbJourSup, int nbJourMax )
 	{
 		DateFr dateModifiee = new DateFr( this );
-		
+
 		if ( dateRef == 'D' ) 
 		{
 			dateModifiee.add( DateFr.DAY_OF_MONTH, nbJourSup );
