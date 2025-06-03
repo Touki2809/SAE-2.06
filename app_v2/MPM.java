@@ -56,17 +56,18 @@ public class MPM
 	public int calculerNiveau( Tache tache ) 
 	{
 		//Déja def ?
-		if ( tache.getNiveau() != -1 ) return -1;
+		if ( tache.getNiveau() != -1 ) return tache.getNiveau();
+
+		if ( tache.getNom().equals( "DÉBUT" ) ) return 0;
 
 		// DÉBUT  ?
 		if ( tache.getNbPrc() == 0 ) tache .setNiveau( 0 );
-		
 
 		// min ?
-		int niveau = -1;
+		int niveau = 10000;
 		for ( Tache tPrc : tache.getlstPrc() ) 
 		{
-			int niveauPrc = calculerNiveau( tPrc );
+			int niveauPrc = calculerNiveau( tPrc )+1;
 
 			if ( niveauPrc != -1 && niveauPrc < niveau ) 
 			{
@@ -76,7 +77,7 @@ public class MPM
 	
 		tache.setNiveau(niveau);
 
-		System.out.println( niveau );
+		System.out.println( tache.getNom() + " --> " + tache.getNiveau() );
 
 		return niveau;
 	}	
@@ -168,6 +169,7 @@ public class MPM
 	public void intiNiveau ()
 	{
 		for ( Tache t : this.ensTaches )
+			this.calculerNiveau( t );
 	}
 
 	/*-------------------*/
@@ -185,29 +187,4 @@ public class MPM
 		return sRet;
 	}
 
-	/*-------------------*/
-	/* main              */
-	/*-------------------*/
-	public static void main(String[] args)
-	{
-		DateFr dateInit;
-		char   dateRef;
-
-
-		//Saisie 
-		System.out.println("Veuillez entrer votre choix :");
-		System.out.println("D - Date de début"            );
-		System.out.println("F - Date de fin"              );
-		System.out.print  ("Votre choix (D/F) : "         );
-		dateRef = Clavier.lire_char();
-
-		System.out.print("Veuillez entrer la date  (format jj/mm/aaaa) : ");
-		dateInit = new DateFr( Clavier.lireString() );
-
-
-
-		MPM mpm = new MPM( dateRef, dateInit );
-
-		System.out.println( mpm );
-	}
 }

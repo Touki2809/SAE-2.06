@@ -34,7 +34,7 @@ public class Tache
 		this.dte_au_tot  = dte_au_tot;
 		this.dte_au_tard = -1;
 		
-		this.niveau = 0;
+		this.niveau = -1;
 		
 		this.lstPrc = new ArrayList<Tache>();
 		this.lstSvt = new ArrayList<Tache>();
