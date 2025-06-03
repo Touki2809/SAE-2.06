@@ -120,8 +120,10 @@ public class MPM
 	{
 		String sRet = "";
 
+		int nbJourMax = this.getTache( this.ensTaches.size() -1 ).getDte_tard();
+
 		for ( Tache t : this.ensTaches )
-			sRet += t.toString( this.getFlagDate(), this.getDate() ) + "\n";
+			sRet += t.toString( this.getFlagDate(), this.getDate(), nbJourMax ) + "\n";
 		
 			return sRet;
 	}
