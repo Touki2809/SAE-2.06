@@ -1,11 +1,9 @@
 package application;
 
-import application.metier.MPM;
-import application.metier.DateFr;
-import application.metier.Tache;
-
+import application.metier.*;
 import application.ihm.ihmCUI;
 
+import iut.algo.Clavier;
 
 /*---------------------------------*/
 /*  Class Controleur               */
@@ -23,8 +21,25 @@ public class Controleur
 	/*-------------------------------*/
     public Controleur() 
 	{
-        this.graphe = new MPM();
-        this.ihmCUI = new ihmCUI(this);
+		DateFr dateInit;
+		char   dateRef;
+
+
+		//Saisie 
+		System.out.println("Veuillez entrer votre choix :");
+        System.out.println("D - Date de début"            );
+        System.out.println("F - Date de fin"              );
+		System.out.print  ("Votre choix (D/F) : "         );
+		dateRef = Clavier.lire_char();
+
+		System.out.print("Veuillez entrer la date  (format jj/mm/aaaa) : ");
+		dateInit = new DateFr( Clavier.lireString() );
+
+
+
+		MPM mpm = new MPM( dateRef, dateInit );
+
+		this.ihmCUI = new ihmCUI(this);
     }
 
 	/*-------------------------------*/
@@ -44,6 +59,9 @@ public class Controleur
 	{
 	    return this.graphe.getListTache().size();
 	}
+
+
+
 	/*------------------*/
 	/* Affichage        */
 	/*------------------*/

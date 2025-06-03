@@ -133,19 +133,19 @@ public class Tache
 	/*------------------*/
 	/* toString         */
 	/*------------------*/
-	public String toString( DateFr dateDebut )
+	public String toString( char dateRef, DateFr date, int nbJourMax )
 	{
-	    String sRet = "";
+	    String sRet    = "";
 
 	    // nom : durée jour(s)
 	    sRet += this.getNom() +   " : " +   this.getDuree()   + 
 	            ( this.getDuree() > 1 ? " jours" : " jour" )  +   "\n"; //avec ou sans s 
 
 	    // Date au plus tôt
-	    sRet += "  date au plus tôt  : " +  dateDebut.toString( this.dte_au_tot ) +  "\n";
+	    sRet += "  date au plus tôt  : " +  date.toString( dateRef, this.dte_au_tot, nbJourMax  ) +  "\n";
 
 		// Date au plus tard
-	    sRet += "  date au plus tard : " +  dateDebut.toString(this.dte_au_tard ) +  "\n";
+	    sRet += "  date au plus tard : " +  date.toString( dateRef, this.dte_au_tard, nbJourMax ) +  "\n";
 
 	    // Marge
 	    sRet += "  marge             : "   +  this.calculerMarge()    + 
@@ -179,5 +179,6 @@ public class Tache
 
 	    return sRet;
 	}
+
 
 }

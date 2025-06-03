@@ -1,8 +1,9 @@
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-
+import java.awt.Color;
 
 
 public class PanelTache extends JPanel
@@ -35,6 +36,10 @@ public class PanelTache extends JPanel
 		this.lblDteTot  = new JLabel( tache.getDte_tot () +"", SwingConstants.CENTER );
 		this.lblDteTard = new JLabel( tache.getDte_tard() +"", SwingConstants.CENTER );
 
+		this.lblTitre  .setBorder( new LineBorder( Color.BLACK, 1 ) ); 		
+		this.lblDteTot .setBorder( new LineBorder( Color.BLACK, 1 ) );
+		this.lblDteTard.setBorder( new LineBorder( Color.BLACK, 1 ) );
+
 		panelDate = new JPanel( new GridLayout( 1, 2 ) );
 
 		/* ----------------------------- */
@@ -45,6 +50,7 @@ public class PanelTache extends JPanel
 		panelDate.add( this.lblDteTot  );
 		panelDate.add( this.lblDteTard );		
 
+		
 		/* ------------------------------ */
 		/* Activation des composants      */
 		/* ------------------------------ */

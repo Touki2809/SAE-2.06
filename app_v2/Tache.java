@@ -17,6 +17,8 @@ public class Tache
 	private int    dte_au_tot; 
 	private int    dte_au_tard;
 
+	private int    niveau;
+
 	private List<Tache> lstPrc;
 	private List<Tache> lstSvt;
 
@@ -31,6 +33,8 @@ public class Tache
 
 		this.dte_au_tot  = dte_au_tot;
 		this.dte_au_tard = -1;
+		
+		this.niveau = 0;
 		
 		this.lstPrc = new ArrayList<Tache>();
 		this.lstSvt = new ArrayList<Tache>();
@@ -48,6 +52,7 @@ public class Tache
 	public int         getDuree   () { return this.duree        ; }
 	public int         getDte_tot () { return this.dte_au_tot   ; }
 	public int         getDte_tard() { return this.dte_au_tard  ; }
+	public int         getNiveau  () { return this.niveau;        }
 
 	public List<Tache> getlstPrc  () { return this.lstPrc       ; }
 	public List<Tache> getlstSvt  () { return this.lstSvt       ; }
@@ -93,7 +98,10 @@ public class Tache
 		}
 	}
 
-
+	public void setNiveau( int niveau )
+	{
+		this.niveau = niveau;
+	}
 	
 
 

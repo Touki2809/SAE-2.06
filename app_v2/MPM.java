@@ -7,6 +7,9 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.util.Queue;
+import java.util.LinkedList;
+
 /*---------------------------------*/
 /*  Class MPM                      */
 /*---------------------------------*/
@@ -36,7 +39,7 @@ public class MPM
 		this.initMpm();
 		this.initDteTot();
 		this.initDteTard();
-
+		this.intiNiveau();
 	}
 
 
@@ -49,6 +52,34 @@ public class MPM
 	public Tache                getTache(int index) { return this.ensTaches.get(index); }
 	//public List<CheminCritique> getListChemin(){ return this.ensCheminCritiques; }
 
+
+	public int calculerNiveau( Tache tache ) 
+	{
+		//Déja def ?
+		if ( tache.getNiveau() != -1 ) return -1;
+
+		// DÉBUT  ?
+		if ( tache.getNbPrc() == 0 ) tache .setNiveau( 0 );
+		
+
+		// min ?
+		int niveau = -1;
+		for ( Tache tPrc : tache.getlstPrc() ) 
+		{
+			int niveauPrc = calculerNiveau( tPrc );
+
+			if ( niveauPrc != -1 && niveauPrc < niveau ) 
+			{
+				niveau = niveauPrc;
+			}
+		}
+	
+		tache.setNiveau(niveau);
+
+		System.out.println( niveau );
+
+		return niveau;
+	}	
 
 
 	/*-------------------------------*/
@@ -134,6 +165,11 @@ public class MPM
 		}
 	}
 	
+	public void intiNiveau ()
+	{
+		for ( Tache t : this.ensTaches )
+	}
+
 	/*-------------------*/
 	/* toString          */
 	/*-------------------*/
@@ -160,8 +196,8 @@ public class MPM
 
 		//Saisie 
 		System.out.println("Veuillez entrer votre choix :");
-        System.out.println("D - Date de début"            );
-        System.out.println("F - Date de fin"              );
+		System.out.println("D - Date de début"            );
+		System.out.println("F - Date de fin"              );
 		System.out.print  ("Votre choix (D/F) : "         );
 		dateRef = Clavier.lire_char();
 

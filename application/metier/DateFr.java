@@ -182,16 +182,23 @@ public class DateFr extends GregorianCalendar
 		       String.format( "%02d", this.get ( DateFr.SECOND ) ) ;
 	}
 
-	public String toString ( int nbJourSup )
+	public String toString ( char dateRef, int nbJourSup, int nbJourMax )
 	{
-		DateFr datePlus = new DateFr( this );
-		datePlus.add( DateFr.DAY_OF_MONTH, nbJourSup );
+		DateFr dateModifiee = new DateFr( this );
+		
+		if ( dateRef == 'D' ) 
+		{
+			dateModifiee.add( DateFr.DAY_OF_MONTH, nbJourSup );
+		} 
+		else 
+		{
+			dateModifiee.add( DateFr.DAY_OF_MONTH, nbJourSup - nbJourMax );
+		}
 
-		return String.format( "%02d", datePlus.get ( DateFr.DAY    ) ) + "/" +
-		       String.format( "%02d", datePlus.get ( DateFr.MONTH  ) ) + "/" +
-		       String.format( "%4d" , datePlus.get ( DateFr.YEAR   ) ) + " " ;
+		return String.format( "%02d", dateModifiee.get ( DateFr.DAY    ) ) + "/" +
+			   String.format( "%02d", dateModifiee.get ( DateFr.MONTH  ) ) + "/" +
+			   String.format( "%4d" , dateModifiee.get ( DateFr.YEAR   ) ) + " " ;
 	}
-
 	public String toString(String format) 
 	{
 		int taille;

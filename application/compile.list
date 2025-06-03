@@ -2,4 +2,4 @@
 ./metier/Tache.java
 ./metier/MPM.java
 ./ihm/ihmCUI.java
-./controleur.java
+./Controleur.java
