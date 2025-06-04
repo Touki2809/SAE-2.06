@@ -41,7 +41,7 @@ public class Lien
 	public void dessiner(Graphics2D g2, Color couleurFleche, Color couleurFond) 
 	{
 		Point debut = new Point( tachePrc.getX() + tachePrc.getWidth(),
-								  tachePrc.getY() + tachePrc.getHeight() / 2 );
+		                         tachePrc.getY() + tachePrc.getHeight() / 2 );
 
 		// plusieurs prc pour svt ?
 		int gapV  = 0;
@@ -53,24 +53,24 @@ public class Lien
 		}
 
 		Point arrivee = new Point( tacheSvt.getX(),
-								   tacheSvt.getY() + tacheSvt.getHeight() / 2 + gapV );
+		                           tacheSvt.getY() + tacheSvt.getHeight() / 2 + gapV );
 
 		Point millieu = new Point( ( debut.x + arrivee.x ) / 2, 
-								   ( debut.y + arrivee.y ) / 2 );
+		                           ( debut.y + arrivee.y ) / 2 );
 
 		// part 1 : - -
 		g2.setColor(couleurFleche);
 		g2.setStroke(new java.awt.BasicStroke(1.5f));
 		g2.drawLine(debut.x, debut.y, arrivee.x, arrivee.y);
-	
+
 		// part 2 : texte
 		g2.setFont( new javax.swing.JLabel().getFont() );
 
 		String texte        = this.getTachePrc().getTache().getDuree() + "";
 		int    largeurTexte = g2.getFontMetrics().stringWidth(texte);
 		int    hauteurTexte = g2.getFontMetrics().getAscent();
-		int    largeurRect = largeurTexte  * 2;
-		int    hauteurRect = hauteurTexte  * 2;
+		int    largeurRect  = largeurTexte  * 2;
+		int    hauteurRect  = hauteurTexte  * 2;
 
 		g2.setColor(couleurFond);
 		g2.fillRect(millieu.x - largeurRect / 2, millieu.y - hauteurRect / 2, largeurRect, hauteurRect);
@@ -85,8 +85,8 @@ public class Lien
 		int largeurFleche  = 7;
 
 		// Calcul de la direction
-		double dx = arrivee.x - debut.x;
-		double dy = arrivee.y - debut.y;
+		double dx    = arrivee.x - debut.x;
+		double dy    = arrivee.y - debut.y;
 		double angle = Math.atan2(dy, dx);
 
 		// Pointe

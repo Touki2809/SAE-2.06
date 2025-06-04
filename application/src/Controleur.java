@@ -3,7 +3,10 @@ package src;
 import src.metier.MPM;
 import src.metier.DateFr;
 import src.metier.Tache;
+
 import src.ihm.FrameMPM;
+
+import java.awt.Point;
 
 import iut.algo.Clavier;
 
@@ -67,6 +70,27 @@ public class Controleur
 		{
 			this.graphe.calculerDateNiveauTard(niveau);
 		}
+	}
+
+	public void majIhm()
+	{
+		this.ihm.fermer();
+		this.ihm = new FrameMPM( this );
+	}
+		
+	public void setFichier( String chemin )
+	{
+		this.graphe.charger( chemin );
+	}
+
+	public void sauvegarder( String chemin )
+	{
+		this.graphe.sauvegarder( chemin );
+	}
+
+	public Point getPosIhm()
+	{
+		return new Point(this.ihm.getX() , this.ihm.getY());
 	}
 
 	/*------------------*/

@@ -84,15 +84,15 @@ public class PanelTache extends JPanel
 
 	public void setCritique(boolean estCritique) 
 	{
-        this.estCritique = estCritique;
-        if (estCritique)  this.setBorder( new LineBorder(Color.RED,   3 ) );
-        else              this.setBorder( new LineBorder(Color.BLACK, 0 ) );
-    }
+		this.estCritique = estCritique;
+		if (estCritique)  this.setBorder( new LineBorder(Color.RED,   3 ) );
+		else              this.setBorder( new LineBorder(Color.BLACK, 0 ) );
+	}
 
-    public boolean isCritique()
-    {
-        return this.estCritique;
-    }
+	public boolean isCritique()
+	{
+		return this.estCritique;
+	}
 
 	/* ------------------------------ */
 	/* Gestion souris, class interne  */

@@ -61,13 +61,7 @@ public class Tache
 	public int         getNbPrc   () { return this.lstPrc.size(); }
 	public int         getNbSvt   () { return this.lstSvt.size(); }
 
-	public void setDteTard(int date) { this.dte_au_tard = date; }
-	public void setDteTot (int date) { this.dte_au_tot  = date; }
-
-	public int calculerMarge()
-	{
-		return  this.getDte_tard() - this.getDte_tot();
-	}
+	public int calculerMarge      () { return  this.getDte_tard() - this.getDte_tot(); }
 
 
 	/*-------------------------------*/
@@ -104,7 +98,6 @@ public class Tache
 		this.niveau = niveau;
 	}
 	
-
 
 	/*------------------*/
 	/* toString         */

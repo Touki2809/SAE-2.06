@@ -2,10 +2,13 @@
 ./src/metier/DateFr.java
 ./src/metier/CheminCritique.java
 ./src/metier/MPM.java
+./src/metier/Ecriture.java
+./src/metier/Lecture.java
 
 ./src/ihm/PanelTache.java
 ./src/ihm/Lien.java
 ./src/ihm/PanelMPM.java
+./src/ihm/MaBarreMenu.java
 ./src/ihm/FrameMPM.java
 
 ./src/Controleur.java

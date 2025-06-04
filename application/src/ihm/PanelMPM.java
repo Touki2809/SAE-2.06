@@ -24,7 +24,6 @@ public class PanelMPM extends JPanel
 	private Controleur        ctrl;
 	private FrameMPM          frame;
 	
-	private List<List<Tache>> tachesParNiveau = new ArrayList<>();
 	private List<PanelTache>  lstPanelTache;
 	private List<Lien>        lstLien;
 
@@ -46,59 +45,49 @@ public class PanelMPM extends JPanel
 		//---
 		this.lstPanelTache = new ArrayList<PanelTache>();
 
-		// Récupérer la liste des tâches
-		List<Tache> lstTaches = this.ctrl.getGraphe().getListTache();
+		// Récupération des tâches
+		List<List<Tache>> tachesParNiveau = this.ctrl.getGraphe().getListTacheParNiveau();
 
-		// Déterminer le niveau de chaque tâche
-		// Regrouper les tâches par niveau
-		int maxNiveau = 0;
-		for (Tache t : lstTaches) 
-		{
-			if (t.getNiveau() > maxNiveau)
-				maxNiveau = t.getNiveau();
-		}
+		int maxNiveau = tachesParNiveau.size() - 1;
 
-		// Tache rangée par niveau
-		this. tachesParNiveau = new ArrayList<>();
-		for (int cptNv = 0; cptNv <= maxNiveau; cptNv++) 
-			tachesParNiveau.add( new ArrayList<>() );
-		
-		for (Tache t : lstTaches) 
+		// cmb maxNv sur une col
+		int maxTache = 0;
+		for ( List<Tache> tachesNiveau : tachesParNiveau ) 
 		{
-			if ( t.getNiveau()  >= 0)  
+			if ( tachesNiveau.size() > maxTache ) 
 			{
-				tachesParNiveau.get( t.getNiveau() ).add(t);
+				maxTache = tachesNiveau.size();
 			}
 		}
 
-		//--- 
-		// Placement simple des panels de tâches 
-		//--- 
-		int panelDim = 40;
-		int hGap     = 60;
-		int vGap     = 60;
+		// dimension
+		int panelDim = 60;
+		int hGap     = 100;
+		int vGap     = 40;		
+		int totalH   = maxTache * panelDim + (maxTache - 1) * vGap;
+		int baseY    = (this.frame.getHeight() - totalH) / 2;
 
 		for (int niveau = 0; niveau <= maxNiveau; niveau++) 
 		{
-			List<Tache> tachesNiveau = tachesParNiveau.get( niveau );
+			List<Tache> tachesNiveau = tachesParNiveau.get(niveau);
 			int         nbTache      = tachesNiveau.size();
 
-			// 
-			int totalH  = nbTache * panelDim + ( nbTache - 1 ) * vGap;
-			int centreY = ( this.frame.getHeight() - totalH ) / 2;
-			int x       = 50 + niveau * ( panelDim + hGap );
+			// depart
+			int defautH = nbTache * panelDim + (nbTache - 1) * vGap;
+			int defautY = baseY + (totalH - defautH) / 2;
 
-			// Placement 
-			for ( int cptT = 0; cptT < nbTache; cptT++ ) 
+			for (int cptT = 0; cptT < nbTache; cptT++) 
 			{
-				Tache tache = tachesNiveau.get( cptT );
-				int       y = centreY + cptT * ( panelDim + vGap );
+				Tache tache = tachesNiveau.get(cptT);
+
+				// cord
+				int x = 50      + niveau * ( panelDim + hGap );
+				int y = defautY + cptT   * ( panelDim + vGap );
 
 				PanelTache panelTache = new PanelTache( this.ctrl, this.frame, tache );
 				panelTache.setBounds( x, y, panelDim, panelDim );
 
-				this.lstPanelTache.add( panelTache );
-				
+				this.lstPanelTache.add ( panelTache );
 			}
 		}
 
@@ -133,14 +122,13 @@ public class PanelMPM extends JPanel
 		}
 		
 		// Permet au JScrollPane de défiler correctement selon la taille du graphe
-        this.setPreferredSize(new java.awt.Dimension(2000, 1000));
+		this.setPreferredSize(new java.awt.Dimension(2000, 1000));
 	}
 
 	/*-------------------------------*/
 	/* Accesseurs                    */
 	/*-------------------------------*/
 	public List<PanelTache>  getLstPanelTache   () { return this.lstPanelTache;   }
-	public List<List<Tache>> getTachesParNiveau () { return this.tachesParNiveau; }
 	public List<Lien>        getLstLien         () { return this.lstLien;         }
 
 	/*-------------------------------*/
@@ -166,30 +154,32 @@ public class PanelMPM extends JPanel
 		}
 	}
 
-	public void maj() {
-		for (PanelTache pt : this.lstPanelTache) {
+	public void maj() 
+	{
+		for (PanelTache pt : this.lstPanelTache) 
+		{
 			pt.majAffichage();
 		}
 		this.repaint();
 	}
 
-    public void afficherCheminCritique()
-    {
-        List<CheminCritique> lstChemins = this.ctrl.getGraphe().getListCheminCritique();
-        for ( PanelTache p : this.lstPanelTache )
-        {
-            boolean estCritique = false;
-            for (CheminCritique chemin : lstChemins)
-            {
-                if (chemin.getCheminCritique().contains(p.getTache()))
-                {
-                    estCritique = true;
-                    break;
-                }
-            }
-            p.setCritique(estCritique);
-        }
+	public void afficherCheminCritique()
+	{
+		List<CheminCritique> lstChemins = this.ctrl.getGraphe().getListCheminCritique();
+		for ( PanelTache p : this.lstPanelTache )
+		{
+			boolean estCritique = false;
+			for (CheminCritique chemin : lstChemins)
+			{
+				if (chemin.getCheminCritique().contains(p.getTache()))
+				{
+					estCritique = true;
+					break;
+				}
+			}
+			p.setCritique(estCritique);
+		}
 		
-        this.repaint();
-    }
+		this.repaint();
+	}
 }

@@ -1,0 +1,14 @@
+A|2|
+B|4|A
+C|3|A
+D|4|A
+E|5|B
+F|1|C,D
+G|4|E
+H|3|F
+I|3|E,G
+J|2|G
+K|4|I,J,H
+L|4|I,K
+M|5|K
+N|2|L,M
