@@ -8,6 +8,7 @@ import java.awt.event.*;
 import javax.swing.border.LineBorder;
 
 import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.Color;
 
 
@@ -70,8 +71,15 @@ public class PanelTache extends JPanel
 		this.addMouseMotionListener(gereSouris);
 	}
 
-	public Tache  getTache() { return this.tache   ; }
+	/*-------------------------------*/
+	/* Accesseurs                    */
+	/*-------------------------------*/
+	public Tache   getTache  () { return this.tache;       }
+	public boolean isCritique() { return this.estCritique; }
 	
+	/*-------------------------------*/
+	/* Méthodes                      */
+	/*-------------------------------*/
 	public void majAffichage() 
 	{
 		if ( this.tache.getDte_tot()  == -1 ) this.lblDteTot  .setText( " " );
@@ -89,20 +97,28 @@ public class PanelTache extends JPanel
 		else              this.setBorder( new LineBorder(Color.BLACK, 0 ) );
 	}
 
-	public boolean isCritique()
-	{
-		return this.estCritique;
-	}
+	
 
 	/* ------------------------------ */
 	/* Gestion souris, class interne  */
 	/* ------------------------------ */
 	private class GereSouris extends MouseAdapter 
 	{
-		private int posX;
-		private int posY;
-		private boolean selectionee = false;
+		/*-------------------------------*/
+		/* Attributs                     */
+		/*-------------------------------*/
+		private int     posX;
+		private int     posY;
+		private boolean selectionee ;
 
+		/*-------------------------------*/
+		/* Méthodes                      */
+		/*-------------------------------*/
+		public void mouseClicked( MouseEvent e ) 
+		{
+			PanelTache.this.ctrl.afficherVueTache( tache );
+		}
+		
 		public void mousePressed( MouseEvent e ) 
 		{
 			selectionee = true;
@@ -124,6 +140,12 @@ public class PanelTache extends JPanel
 
 				PanelTache.this.setLocation( nvPosX, nvPosY );
 				
+				this.posX = e.getX();
+				this.posY = e.getY();
+
+				PanelTache.this.tache.setPosX( nvPosX );
+				PanelTache.this.tache.setPosY( nvPosY );
+
 				PanelTache.this.frame.repaint();
 			}
 		}

@@ -36,9 +36,12 @@ public class CheminCritique
 		this.cheminCritique.add(t);
 	}
 	
-	public ArrayList<Tache> getCheminCritique(){return this.cheminCritique;}
-	
+	/*-------------------------------*/
+	/* Accesseurs                    */
+	/*-------------------------------*/
+		public ArrayList<Tache> getCheminCritique() { return this.cheminCritique; }
 
+	
 	/*-------------------------------*/
 	/* Méthodes                      */
 	/*-------------------------------*/

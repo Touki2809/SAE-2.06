@@ -41,7 +41,7 @@ public class PanelBtn extends JPanel implements ActionListener
 		this.btnTard.setEnabled(false);
 
 		this.btnCritique = new JButton("Chemin critique");
-		this.btnCritique.setEnabled(false); // Désactivé par défaut
+		this.btnCritique.setEnabled(false); 
 		this.add(this.btnCritique);
 		this.btnCritique.addActionListener(this);
 
@@ -87,7 +87,7 @@ public class PanelBtn extends JPanel implements ActionListener
 	{
 		int maxNiveau = this.frame.getCtrl().getGraphe().getListTache().get(this.frame.getCtrl().getGraphe().getListTache().size() - 1).getNiveau();
 
-		if (  this.btnTot.isEnabled() ) this.btnTot.setEnabled ( this.cptDate <= maxNiveau );
+		if (  this.btnTot.isEnabled() ) this.btnTot.setEnabled( this.cptDate <= maxNiveau );
 		if ( !this.btnTot.isEnabled() ) this.btnTard.setEnabled( this.cptDate > 0 );
 
 		

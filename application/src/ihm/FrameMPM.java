@@ -3,20 +3,29 @@ package src.ihm;
 import src.Controleur;
 
 import javax.swing.*;
-import java.awt.*;
+
+import java.awt.BorderLayout;
+
 import java.awt.event.*;
+import java.awt.Point;
 
 /*---------------------------------*/
 /*  Class FrameMPM                 */
 /*---------------------------------*/
 public class FrameMPM extends JFrame
 {
+	/*-------------------------------*/
+	/* Attributs                     */
+	/*-------------------------------*/
 	private Controleur  ctrl;
 
 	private MaBarreMenu barMenu;
 	private PanelMPM    panelMPM;
 	private PanelBtn    panelBtn;
 
+	/*-------------------------------*/
+	/* Constructeur                  */
+	/*-------------------------------*/
 	public FrameMPM( Controleur ctrl )
 	{
 		this.ctrl = ctrl;
@@ -25,8 +34,9 @@ public class FrameMPM extends JFrame
 
 		this.setTitle   ( "MPM"     );
 		this.setSize    ( 1000, 700 );
+	
 		this.setLocation(  500,  40 );
-		this.setLayout(new BorderLayout());
+		this.setLayout( new BorderLayout() );
 
 		/*-------------------------------*/
 		/* Création des composants       */
@@ -34,7 +44,9 @@ public class FrameMPM extends JFrame
 		this.barMenu = new MaBarreMenu( ctrl );
 
 		this.panelMPM = new PanelMPM( ctrl, this );
-		spMPM = new JScrollPane(this.panelMPM, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		spMPM = new JScrollPane( this.panelMPM                          , 
+		                         JScrollPane.VERTICAL_SCROLLBAR_ALWAYS  ,
+		                         JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS );
 
 		this.panelBtn = new PanelBtn( this );
 
@@ -49,11 +61,11 @@ public class FrameMPM extends JFrame
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	public void maj()
-	{
-		this.panelMPM.maj();
-	}
-
+	/*-------------------------------*/
+	/* Méthodes                      */
+	/*-------------------------------*/
+	public void fermer () { this.dispose();     }
+	public void maj    () { this.panelMPM.maj();}
 
 	public void calculerDate(int cpt, char type)
 	{
@@ -68,7 +80,10 @@ public class FrameMPM extends JFrame
 		this.panelMPM.afficherCheminCritique();
 	}
 
-	public void fermer() { this.dispose(); }
 
+	/*-------------------------------*/
+	/* Accesseurs                    */
+	/*-------------------------------*/
 	public Controleur getCtrl() { return this.ctrl; }
+	
 }

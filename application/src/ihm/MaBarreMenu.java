@@ -44,7 +44,7 @@ public class MaBarreMenu extends JMenuBar implements ActionListener
 		menuFichier.add( this.menuiSauvegarder );
 		menuFichier.add( this.menuiQuitter     );
 
-		// Des JMenu dans la JMenuBar
+		// des JMenu dans la JMenuBar
 		menuBar.add( menuFichier );
 
 		this.add( menuBar );
@@ -65,13 +65,13 @@ public class MaBarreMenu extends JMenuBar implements ActionListener
 		{
 			JFileChooser fileChooser = new JFileChooser( "./../data/" );
 			if ( fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION )
-				this.ctrl.setFichier ( fileChooser.getSelectedFile().getAbsolutePath() );
+				this.ctrl.charger ( fileChooser.getSelectedFile().getAbsolutePath() );
 			
 			this.ctrl.majIhm();
 		}
 		if ( e.getSource() == this.menuiSauvegarder )
 		{
-			this.ctrl.sauvegarder("./../data/");
+			FrameSave frameSave = new FrameSave( this.ctrl );
 		}
 		if ( e.getSource() == this.menuiQuitter     )
 		{

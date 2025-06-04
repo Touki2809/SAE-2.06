@@ -5,7 +5,10 @@ import src.metier.DateFr;
 import src.metier.Tache;
 
 import src.ihm.FrameMPM;
+import src.ihm.FrameVueTache;
+import src.ihm.PanelVueTache;
 
+import java.awt.Panel;
 import java.awt.Point;
 
 import iut.algo.Clavier;
@@ -34,42 +37,48 @@ public class Controleur
 		System.out.println("Veuillez entrer votre choix :");
 		System.out.println("D - Date de début"            );
 		System.out.println("F - Date de fin"              );
-		//System.out.println("A - Auto"                     );
+		//System.out.println("A - Auto"                     ); //pour skip
 		System.out.print  ("Votre choix (D/F) : "         );
 		dateRef = Clavier.lire_char();
 
 		if (dateRef != 'A' ) 
 		{
 			System.out.print("Veuillez entrer la date  (format jj/mm/aaaa) : ");
-				dateInit = new DateFr( Clavier.lireString() );
+			try { dateInit = new DateFr( Clavier.lireString() ); } 
+			catch (Exception e)  
+			{
+				 System.out.println("Erreur de saisie, défaut  " + dateInit.toString( "jj/mm/aaaa" ) ); 
+			}
 		}
 
-
 		this.graphe = new MPM( dateRef, dateInit );
-
-		
-		this.ihm = new FrameMPM( this );
+		this.ihm    = new FrameMPM( this );
 	}
 
 	/*-------------------------------*/
 	/* Accesseurs                    */
 	/*-------------------------------*/
-
 	public MPM getGraphe() 
 	{
 		return this.graphe;
 	}
 
+	/*-------------------------------*/
+	/* Modificateurs                */
+	/*-------------------------------*/
+	public Point getPosIhmSave()
+	{
+		return new Point( this.ihm.getX() + this.ihm.getWidth () / 2 ,
+		                  this.ihm.getY() + this.ihm.getHeight() / 2  );
+	}
+
+	/*-------------------------------*/
+	/* Méthodes                      */
+	/*-------------------------------*/
 	public void calculerDate(int niveau, char type)
 	{
-		if (type == '-')
-		{
-			this.graphe.calculerDateNiveauTot(niveau);
-		}
-		else if (type == '+')
-		{
-			this.graphe.calculerDateNiveauTard(niveau);
-		}
+		if (type == '-') this.graphe.calculerDateNiveauTot(niveau);
+		else             this.graphe.calculerDateNiveauTard(niveau);
 	}
 
 	public void majIhm()
@@ -77,20 +86,20 @@ public class Controleur
 		this.ihm.fermer();
 		this.ihm = new FrameMPM( this );
 	}
-		
-	public void setFichier( String chemin )
+
+	public void charger( String chemin )
 	{
 		this.graphe.charger( chemin );
 	}
 
-	public void sauvegarder( String chemin )
+	public boolean sauvegarder( String chemin )
 	{
-		this.graphe.sauvegarder( chemin );
+		return this.graphe.sauvegarder( chemin );
 	}
 
-	public Point getPosIhm()
+	public void afficherVueTache ( Tache t )
 	{
-		return new Point(this.ihm.getX() , this.ihm.getY());
+		new FrameVueTache ( this, t );
 	}
 
 	/*------------------*/

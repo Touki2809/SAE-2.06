@@ -23,11 +23,14 @@ public class Tache
 	private List<Tache> lstPrc;
 	private List<Tache> lstSvt;
 
+	private int          posX;
+	private int          posY;
+
 	
 	/*-------------------------------*/
 	/* Constructeur                  */
 	/*-------------------------------*/
-	public Tache ( String nom, int duree, int dte_au_tot )
+	public Tache ( String nom, int duree,int dte_au_tot , int niveau, int posX, int posY )
 	{
 		this.nom   =    nom;
 		this.duree =  duree;
@@ -35,16 +38,26 @@ public class Tache
 		this.dte_au_tot  = dte_au_tot;
 		this.dte_au_tard = -1;
 		
-		this.niveau = -1;
+		this.niveau = niveau;
+
+		this.posX   = posX;
+		this.posY   = posY;
 		
 		this.lstPrc = new ArrayList<Tache>();
 		this.lstSvt = new ArrayList<Tache>();
+	}
+
+	public Tache ( String nom, int duree, int dte_au_tot )
+	{
+		this( nom, duree, dte_au_tot, 0, 0, 0 );
 	}
 
 	public Tache ( String nom, int duree )
 	{
 		this( nom, duree, -1 );
 	}
+
+	
 
 	/*-------------------------------*/
 	/* Accesseurs                    */
@@ -53,7 +66,9 @@ public class Tache
 	public int         getDuree   () { return this.duree        ; }
 	public int         getDte_tot () { return this.dte_au_tot   ; }
 	public int         getDte_tard() { return this.dte_au_tard  ; }
-	public int         getNiveau  () { return this.niveau;        }
+	public int         getNiveau  () { return this.niveau       ; }
+	public int         getPosX    () { return this.posX         ; }
+	public int         getPosY    () { return this.posY         ; }
 
 	public List<Tache> getlstPrc  () { return this.lstPrc       ; }
 	public List<Tache> getlstSvt  () { return this.lstSvt       ; }
@@ -97,6 +112,9 @@ public class Tache
 	{
 		this.niveau = niveau;
 	}
+
+	public void setPosX ( int x ) { this.posX = x ; }
+	public void setPosY ( int y ) { this.posY = y ; }
 	
 
 	/*------------------*/

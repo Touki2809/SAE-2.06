@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Queue;
 import java.util.LinkedList;
 
+import java.awt.Point;
+
 /*---------------------------------*/
 /*  Class MPM                      */
 /*---------------------------------*/
@@ -39,7 +41,7 @@ public class MPM
 		this.ensTaches           = new ArrayList<Tache>         ();
 		this.ensCheminCritiques  = new ArrayList<CheminCritique>();
 
-		Lecture.initMpm( this, "../data/import/4.data" );
+		Lecture.initMpm( this, "../data/import/1.data" );
 		
 		this.setListTacheParNiveau();
 		this.calculerNiveau();
@@ -57,6 +59,25 @@ public class MPM
 	public Tache                getTache(int index)     { return this.ensTaches.get(index); }
 	public int                  getNbTache()            { return this.ensTaches.size();     }
 
+	public Integer getNiveau(Tache t)
+	{
+		for ( int cpt = 0; cpt < this.ensTachesParNiveau.size(); cpt++ )
+			for ( Tache tache : this.ensTachesParNiveau.get(cpt) )
+				if ( tache.equals( t ) ) return cpt;
+		
+		return null;
+	}
+
+	public int getLong()
+	{
+
+		int maxLong = 0;
+		for ( Tache t : this.ensTaches )
+		{
+			if ( t.getNom().length() > maxLong ) maxLong = t.getNom().length();
+		}
+		return maxLong;
+	}
 
 	/*-------------------------------*/
 	/* Méthodes                      */
@@ -120,6 +141,8 @@ public class MPM
 			}
 		}
 	}
+
+	//public void setPosX
 
 
 	public void calculerDateNiveauTot(int niveau)
@@ -214,9 +237,9 @@ public class MPM
 		this.calculerNiveau();
 	}
 
-	public void sauvegarder( String chemin )
+	public boolean sauvegarder( String chemin )
 	{
-		Ecriture.sauvegarde( this , chemin );
+		return Ecriture.sauvegarde( this , chemin );
 	}
 
 

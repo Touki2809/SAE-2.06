@@ -15,30 +15,58 @@ import java.util.ArrayList;
 /*---------------------------------*/
 abstract class Ecriture
 {
-	public static void sauvegarde( MPM graphe, String nomFichier )
+	
+
+	public static boolean sauvegarde( MPM graphe, String nomFichier )
 	{
-		String prc;
-		File   fichier = new File( "./../data/save/" + nomFichier + ".data" );
+		// Le fichier exciste ?
+		File dossier = new File("./../data/save/");
+
+		if ( dossier.exists() && dossier.isDirectory() )
+		{
+			File[] fichiers = dossier.listFiles();
+
+			for (File f : fichiers)
+				if ( f.getName().equals( nomFichier + ".mpm2" ) || f.isDirectory() ) return false;
+		}
 		
+		String prc;
 		try
 		{
-			PrintWriter pw = new PrintWriter( new FileOutputStream(  "./../data/save/" + nomFichier + ".data" ) );
+			/*
+			Nom|Duree|lstPrc|niveau|posX|posY
+			*/
+			
+			PrintWriter pw = new PrintWriter( new FileOutputStream(  "./../data/save/" + nomFichier + ".mpm2" ) );
 			for( Tache t : graphe.getListTache() )
 			{
 				prc = "";
 				if ( t.getlstPrc() != null )
 				{
+					//Calcul de la liste des précédents
 					for( int cpt = 0; cpt < t.getlstPrc().size(); cpt++ )
 					{
-						if ( cpt < t.getlstPrc().size() - 1 ) prc += t.getlstPrc().get(cpt) + ",";
-						else                                  prc += t.getlstPrc().get(cpt);
+						if ( cpt < t.getlstPrc().size() - 1 ) prc += t.getlstPrc().get(cpt).getNom() + ",";
+						else                                  prc += t.getlstPrc().get(cpt).getNom();
 					}
 				}
-				pw.println( t.getNom() + "|" + t.getDuree() + "|" + prc );
+
+
+				pw.println( t.getNom   () + "|" +
+				            t.getDuree () + "|" +
+				            prc           + "|" +
+				            t.getNiveau() + "|" +
+				            t.getPosX  () + "|" +
+				            t.getPosY  ()         );
 			}
 
 			pw.close();
 	
 		} catch (Exception e) { e.printStackTrace(); }
+
+		
+		return true;
 	}
+
+	
 }

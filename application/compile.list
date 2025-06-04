@@ -1,14 +1,21 @@
-./src/metier/Tache.java
 ./src/metier/DateFr.java
-./src/metier/CheminCritique.java
-./src/metier/MPM.java
+
 ./src/metier/Ecriture.java
 ./src/metier/Lecture.java
 
-./src/ihm/PanelTache.java
+./src/metier/Tache.java
+./src/metier/CheminCritique.java
+./src/metier/MPM.java
+
 ./src/ihm/Lien.java
+./src/ihm/PanelTache.java
 ./src/ihm/PanelMPM.java
 ./src/ihm/MaBarreMenu.java
 ./src/ihm/FrameMPM.java
+
+./src/ihm/FrameSave.java
+
+./src/ihm/PanelVueTache.java
+./src/ihm/FrameVueTache.java
 
 ./src/Controleur.java

@@ -10,6 +10,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import java.awt.Point;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -61,11 +63,12 @@ public class PanelMPM extends JPanel
 		}
 
 		// dimension
-		int panelDim = 60;
-		int hGap     = 100;
-		int vGap     = 40;		
-		int totalH   = maxTache * panelDim + (maxTache - 1) * vGap;
-		int baseY    = (this.frame.getHeight() - totalH) / 2;
+		int panell = this.ctrl.getGraphe().getLong() * 10;
+		int panelL =  60;
+		int hGap   = 100;
+		int vGap   = 40;		
+		int totalH = maxTache * panelL + (maxTache - 1) * vGap;
+		int baseY  = (this.frame.getHeight() - totalH) / 2;
 
 		for (int niveau = 0; niveau <= maxNiveau; niveau++) 
 		{
@@ -73,7 +76,7 @@ public class PanelMPM extends JPanel
 			int         nbTache      = tachesNiveau.size();
 
 			// depart
-			int defautH = nbTache * panelDim + (nbTache - 1) * vGap;
+			int defautH = nbTache * 60 + (nbTache - 1) * vGap;
 			int defautY = baseY + (totalH - defautH) / 2;
 
 			for (int cptT = 0; cptT < nbTache; cptT++) 
@@ -81,11 +84,11 @@ public class PanelMPM extends JPanel
 				Tache tache = tachesNiveau.get(cptT);
 
 				// cord
-				int x = 50      + niveau * ( panelDim + hGap );
-				int y = defautY + cptT   * ( panelDim + vGap );
+				int x = 50      + niveau * ( panell + hGap );
+				int y = defautY + cptT   * ( 60 + vGap );
 
 				PanelTache panelTache = new PanelTache( this.ctrl, this.frame, tache );
-				panelTache.setBounds( x, y, panelDim, panelDim );
+				panelTache.setBounds( x, y, panell, panelL );
 
 				this.lstPanelTache.add ( panelTache );
 			}
@@ -105,8 +108,8 @@ public class PanelMPM extends JPanel
 				{
 					if ( panelSvt.getTache().equals( tacheSvt ) ) 
 					{
-						this.lstLien.add(new Lien( panelTache, 
-												   panelSvt  , 
+						this.lstLien.add(new Lien( panelTache        , 
+												   panelSvt          , 
 												   tacheSvt.getDuree()  ) );
 					}
 				}
@@ -131,6 +134,9 @@ public class PanelMPM extends JPanel
 	public List<PanelTache>  getLstPanelTache   () { return this.lstPanelTache;   }
 	public List<Lien>        getLstLien         () { return this.lstLien;         }
 
+	public Point getPos( int val ) { return new Point( this.lstPanelTache.get( val ).getX() ,
+	                                                   this.lstPanelTache.get( val ).getY() ); }
+
 	/*-------------------------------*/
 	/*     PAINT                     */
 	/*-------------------------------*/
@@ -141,13 +147,21 @@ public class PanelMPM extends JPanel
 		if ( this.lstLien != null && ! this.lstLien.isEmpty() ) 
 		{
 			this.g2 = (Graphics2D) g;
-			for (Lien lien : this.lstLien) 
+
+			for ( Lien lien : this.lstLien ) 
 			{
+				Tache tachePrc = lien.getTachePrc().getTache();
+				Tache tacheSvt = lien.getTacheSvt().getTache();
+				
 				boolean crit1 = lien.getTachePrc().isCritique();
 				boolean crit2 = lien.getTacheSvt().isCritique();
 
-				Color couleur = Color.BLACK;
-				if ( crit1 && crit2 )  couleur = Color.RED;
+				Color couleur = Color.BLUE;
+
+				if ( crit1 && crit2 && tachePrc.calculerMarge() == tacheSvt.calculerMarge() )
+				{
+					couleur = Color.RED;
+				}
 
 				lien.dessiner(this.g2, couleur, this.frame.getBackground());
 			}
