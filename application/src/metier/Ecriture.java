@@ -33,10 +33,6 @@ abstract class Ecriture
 		String prc;
 		try
 		{
-			/*
-			Nom|Duree|lstPrc|niveau|posX|posY
-			*/
-			
 			PrintWriter pw = new PrintWriter( new FileOutputStream(  "./../data/save/" + nomFichier + ".mpm2" ) );
 			for( Tache t : graphe.getListTache() )
 			{
@@ -52,12 +48,14 @@ abstract class Ecriture
 				}
 
 
-				pw.println( t.getNom   () + "|" +
-				            t.getDuree () + "|" +
-				            prc           + "|" +
-				            t.getNiveau() + "|" +
-				            t.getPosX  () + "|" +
-				            t.getPosY  ()         );
+				pw.println( t.getNom     () + "|" +
+				            t.getDuree   () + "|" +
+				            prc             + "|" +
+				            t.getDte_tot () + "|" +
+				            t.getDte_tard() + "|" +
+				            t.getNiveau  () + "|" +
+				            t.getPosX    () + "|" +
+				            t.getPosY    ()         );
 			}
 
 			pw.close();

@@ -3,40 +3,35 @@ package src.metier;
 import java.util.List;
 import java.util.ArrayList;
 
-
-/*---------------------------------*/
-/*  Class Tache                    */
-/*---------------------------------*/
 public class Tache
 {
 	/*-------------------------------*/
 	/* Attributs                     */
 	/*-------------------------------*/
-	private String nom;
-	private int    duree; 
+	private String      nom;
+	private int         duree; 
 
-	private int    dte_au_tot; 
-	private int    dte_au_tard;
+	private int         dte_au_tot; 
+	private int         dte_au_tard;
 
-	private int    niveau;
+	private int         niveau;
 
 	private List<Tache> lstPrc;
 	private List<Tache> lstSvt;
 
 	private int          posX;
 	private int          posY;
-
 	
 	/*-------------------------------*/
 	/* Constructeur                  */
 	/*-------------------------------*/
-	public Tache ( String nom, int duree,int dte_au_tot , int niveau, int posX, int posY )
+	public Tache ( String nom, int duree,int dte_au_tot ,int dte_au_tard, int niveau, int posX, int posY )
 	{
 		this.nom   =    nom;
 		this.duree =  duree;
 
 		this.dte_au_tot  = dte_au_tot;
-		this.dte_au_tard = -1;
+		this.dte_au_tard = dte_au_tard;
 		
 		this.niveau = niveau;
 
@@ -49,7 +44,7 @@ public class Tache
 
 	public Tache ( String nom, int duree, int dte_au_tot )
 	{
-		this( nom, duree, dte_au_tot, 0, 0, 0 );
+		this( nom, duree, dte_au_tot, -1, 0, 0, 0 );
 	}
 
 	public Tache ( String nom, int duree )
@@ -108,13 +103,10 @@ public class Tache
 		}
 	}
 
-	public void setNiveau( int niveau )
-	{
-		this.niveau = niveau;
-	}
+	public void setNiveau( int niveau ) { this.niveau = niveau ; }
 
-	public void setPosX ( int x ) { this.posX = x ; }
-	public void setPosY ( int y ) { this.posY = y ; }
+	public void setPosX  ( int x )      { this.posX   = x      ; }
+	public void setPosY  ( int y )      { this.posY   = y      ; }
 	
 
 	/*------------------*/

@@ -68,7 +68,7 @@ public class PanelMPM extends JPanel
 		int hGap   = 100;
 		int vGap   = 40;		
 		int totalH = maxTache * panelL + (maxTache - 1) * vGap;
-		int baseY  = (this.frame.getHeight() - totalH) / 2;
+		int baseY  = 5000;
 
 		for (int niveau = 0; niveau <= maxNiveau; niveau++) 
 		{
@@ -93,7 +93,7 @@ public class PanelMPM extends JPanel
 				this.lstPanelTache.add ( panelTache );
 			}
 		}
-
+		
 
 		//---
 		// Lien entre les tâches
@@ -124,9 +124,12 @@ public class PanelMPM extends JPanel
 			this.add( panelTache );
 		}
 		
-		// Permet au JScrollPane de défiler correctement selon la taille du graphe
-		this.setPreferredSize(new java.awt.Dimension(2000, 1000));
-	}
+		// dim
+        int largeurPanel = 50 + (maxNiveau + 1) * (panell + hGap) + 100;
+        int hauteurPanel = 10000;
+
+        this.setPreferredSize(new java.awt.Dimension(largeurPanel, hauteurPanel));
+    }
 
 	/*-------------------------------*/
 	/* Accesseurs                    */

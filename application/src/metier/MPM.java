@@ -13,9 +13,7 @@ import java.util.LinkedList;
 
 import java.awt.Point;
 
-/*---------------------------------*/
-/*  Class MPM                      */
-/*---------------------------------*/
+
 public class MPM
 {
 	/*-------------------------------*/
@@ -41,7 +39,7 @@ public class MPM
 		this.ensTaches           = new ArrayList<Tache>         ();
 		this.ensCheminCritiques  = new ArrayList<CheminCritique>();
 
-		Lecture.initMpm( this, "../data/import/1.data" );
+		Lecture.initMpm( this, "../data/import/1.mpm" );
 		
 		this.setListTacheParNiveau();
 		this.calculerNiveau();
@@ -115,7 +113,7 @@ public class MPM
 		this.setListTacheParNiveau();
 	}
 
-	public void setListTacheParNiveau( )
+	public void setListTacheParNiveau()
 	{
 		this.ensTachesParNiveau = new ArrayList<List<Tache>>();
 
@@ -141,9 +139,6 @@ public class MPM
 			}
 		}
 	}
-
-	//public void setPosX
-
 
 	public void calculerDateNiveauTot(int niveau)
 	{

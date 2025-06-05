@@ -22,6 +22,7 @@ public class FrameMPM extends JFrame
 	private MaBarreMenu barMenu;
 	private PanelMPM    panelMPM;
 	private PanelBtn    panelBtn;
+	private JScrollPane spMPM;
 
 	/*-------------------------------*/
 	/* Constructeur                  */
@@ -33,9 +34,9 @@ public class FrameMPM extends JFrame
 		JScrollPane spMPM;
 
 		this.setTitle   ( "MPM"     );
-		this.setSize    ( 1000, 700 );
-	
-		this.setLocation(  500,  40 );
+		//this.setSize    ( 1000, 700 );
+		//this.setLocation(  500,  40 );
+		
 		this.setLayout( new BorderLayout() );
 
 		/*-------------------------------*/
@@ -44,7 +45,8 @@ public class FrameMPM extends JFrame
 		this.barMenu = new MaBarreMenu( ctrl );
 
 		this.panelMPM = new PanelMPM( ctrl, this );
-		spMPM = new JScrollPane( this.panelMPM                          , 
+
+		spMPM = new JScrollPane( this.panelMPM , 
 		                         JScrollPane.VERTICAL_SCROLLBAR_ALWAYS  ,
 		                         JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS );
 
@@ -57,8 +59,16 @@ public class FrameMPM extends JFrame
 		this.add( panelBtn, BorderLayout.NORTH  );
 		this.add( spMPM   , BorderLayout.CENTER );
 
+		/*-------------------------------*/
+		/* Gestion des événements        */
+		/*-------------------------------*/
+		this.addComponentListener( new GereFramePlateau( this ) );
+
 		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		spMPM.getVerticalScrollBar().setValue( 4827 );
+
 	}
 
 	/*-------------------------------*/
@@ -80,10 +90,36 @@ public class FrameMPM extends JFrame
 		this.panelMPM.afficherCheminCritique();
 	}
 
+	public void setMajPos ( int x, int y, int type )
+	{
+		this.ctrl.setMajPos( x, y, type );
+	}
+
 
 	/*-------------------------------*/
 	/* Accesseurs                    */
 	/*-------------------------------*/
 	public Controleur getCtrl() { return this.ctrl; }
-	
+
+	public int getPosX() { return this.getX(); }
+	public int getPosY() { return this.getY(); }
+
+
+
+	/*---------------------------------------*/
+	/*        class GereFramePlateau         */
+	/*---------------------------------------*/
+	private class GereFramePlateau extends ComponentAdapter
+	{
+		private FrameMPM frame;
+
+		//Construcueur 
+		public GereFramePlateau ( FrameMPM frame) { this.frame = frame; }
+
+		//Méthode qui permet de savoir si la frame est déplacé
+		public void componentMoved ( ComponentEvent e) 
+		{ 
+			this.frame.setMajPos ( this.frame.getX(), this.frame.getY(), 1 );
+		}
+	}
 }

@@ -8,7 +8,7 @@ import src.ihm.FrameMPM;
 import src.ihm.FrameVueTache;
 import src.ihm.PanelVueTache;
 
-import java.awt.Panel;
+import java.awt.Dimension;
 import java.awt.Point;
 
 import iut.algo.Clavier;
@@ -21,8 +21,9 @@ public class Controleur
 	/*-------------------------------*/
 	/* Attributs                     */
 	/*-------------------------------*/
-	private MPM      graphe;
-	private FrameMPM ihm;
+	private MPM           graphe;
+	private FrameMPM      ihm;
+	private FrameVueTache frameTache;
 
 	/*-------------------------------*/
 	/* Constructeur                  */
@@ -51,8 +52,11 @@ public class Controleur
 			}
 		}
 
-		this.graphe = new MPM( dateRef, dateInit );
-		this.ihm    = new FrameMPM( this );
+		this.graphe     = new MPM( dateRef, dateInit );
+		this.ihm        = new FrameMPM( this );
+		this.frameTache = null;
+		
+		this.setInitPos();
 	}
 
 	/*-------------------------------*/
@@ -85,6 +89,7 @@ public class Controleur
 	{
 		this.ihm.fermer();
 		this.ihm = new FrameMPM( this );
+		this.setInitPos();
 	}
 
 	public void charger( String chemin )
@@ -99,7 +104,60 @@ public class Controleur
 
 	public void afficherVueTache ( Tache t )
 	{
-		new FrameVueTache ( this, t );
+		this.frameTache = new FrameVueTache ( this, t );
+		this.setInitPos();
+	}
+
+
+	/*-------------------------------*/
+	/* Positionnement des Frames     */
+	/*-------------------------------*/
+	public void setInitPos(  )
+	{
+		Dimension tailleEcran;
+		int centreX, centreY;
+		int h;
+		int l1, l2;
+		int aX, bX;
+		int y;
+
+		tailleEcran = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+
+		centreX   = (int) ( tailleEcran.getWidth () - tailleEcran.getWidth () % 20 ) / 2;
+		centreY   = (int) tailleEcran.getHeight() / 2;
+	
+		h = 700;
+
+		l1 = 1000;
+		l2 =  400;
+
+		aX = centreX - ( l1 * 2/3 ) ;
+		bX = aX + l1 + 20;
+
+		y = centreY - h / 2;
+
+		this.ihm.setLocation( aX, y );
+		this.ihm.setSize    ( l1, h );
+
+		if ( this.frameTache != null )
+		{
+			this.frameTache.setLocation( bX, y );
+			this.frameTache.setSize    ( l2, h );
+		}
+	}
+
+	public void setMajPos( int x, int y, int frame )
+	{
+		if ( frame == 1 )
+		{
+			if ( this.frameTache != null )  this.frameTache.setLocation( x + 1020, y );
+					
+		} 
+		if ( frame == 2 ) 
+		{
+			if ( this.ihm != null ) this.ihm.setLocation( x - 1020, y );
+		}
+
 	}
 
 	/*------------------*/

@@ -51,12 +51,19 @@ public class PanelVueTache extends JPanel
 		this.txtDuree     = new JTextField( this.tache.getDuree());
 
 		// prc
-		String[] lstPrcTemp = new String[ this.tache.getNbPrc() ];
-		for ( int cptT= 0; cptT<lstPrcTemp.length; cptT++ )
+		int nbNivea = this.tache.getNiveau();
+		List<String> lstPrcTemp = new ArrayList<String>();
+		for  ( int cptN=0; cptN<nbNivea; cptN++ )
 		{
-			lstPrcTemp[cptT] = this.tache.getlstPrc().get( cptT ).getNom();
+			for ( Tache tPrc : this.ctrl.getGraphe().getListTacheParNiveau().get(cptN) )
+			{
+				if ( ! lstPrcTemp.contains( tPrc.getNom() ) ) 
+				{
+					lstPrcTemp.add( tPrc.getNom() );
+				}
+			}
 		}
-		JList<String> lstPrc = new JList<>( lstPrcTemp );
+		JList<String> lstPrc = new JList<>( lstPrcTemp.toArray(new String[0]) );
 
 
 		// Boutons
@@ -71,9 +78,10 @@ public class PanelVueTache extends JPanel
 		panelSaisie.add( new JLabel( "Durée : ", SwingConstants.RIGHT ) );
 		panelSaisie.add( this.txtDuree );
 
-		panelPrc.add( new JLabel( "Précédentes : ") );
+		panelPrc.add( new JLabel( "Précédents : ") );
+		panelPrc.add( new JLabel() );
 		panelPrc.add( lstPrc );
-		
+
 
 
 		panelBtn.add( this.btnSupprimer );
@@ -86,5 +94,5 @@ public class PanelVueTache extends JPanel
 		
 
 	}
-
 }
+

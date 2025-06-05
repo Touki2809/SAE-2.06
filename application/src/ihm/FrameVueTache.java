@@ -5,6 +5,8 @@ import src.metier.Tache;
 
 import javax.swing.*;
 
+import java.awt.event.*;
+
 /*---------------------------------*/
 /*  Class FrameVueTache            */
 /*---------------------------------*/
@@ -27,7 +29,7 @@ public class FrameVueTache extends JFrame
 		this.tache = tache;
 
 		this.setTitle   ( "Vue Tâche" );
-		this.setSize    ( 1000, 700 );
+		//this.setSize    (  400, 700 );
 		this.setLocation(  500,  40 );
 
 		/*-------------------------------*/
@@ -40,8 +42,40 @@ public class FrameVueTache extends JFrame
 		/*-------------------------------*/
 		this.add( this.panelVueTache );
 
+		
+		/*-------------------------------*/
+		/* Gestion des événements        */
+		/*-------------------------------*/
+		this.addComponentListener( new GereFramePlateau( this ) );
+
 
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setVisible(true);
+	}
+
+	/*-------------------------------*/
+	/* Méthodes                      */
+	/*-------------------------------*/
+	public void setMajPos( int x, int y, int type )
+	{
+		this.ctrl.setMajPos(  x, y, type );	
+	}
+	
+
+	/*---------------------------------------*/
+	/*        class GereFramePlateau         */
+	/*---------------------------------------*/
+	private class GereFramePlateau extends ComponentAdapter
+	{
+		private FrameVueTache frame;
+
+		//Construcueur 
+		public GereFramePlateau ( FrameVueTache frame) { this.frame = frame; }
+
+		//Méthode qui permet de savoir si la frame est déplacé
+		public void componentMoved ( ComponentEvent e) 
+		{ 
+			this.frame.setMajPos ( this.frame.getX(), this.frame.getY(), 2 );
+		}
 	}
 }

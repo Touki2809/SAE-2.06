@@ -1,0 +1,14 @@
+DÉBUT|0||0|-1|0|0|0
+Architecte|4|DÉBUT|0|-1|1|294|4972
+Fondations (creuser)|2|Architecte|4|-1|2|410|5154
+Commande des matériaux|1|Architecte|4|-1|2|0|0
+Commande des huisseries|1|Architecte|4|-1|2|0|0
+Livraison des matériaux|2|Commande des matériaux|5|-1|3|0|0
+Fondations (coulage dalle)|2|Fondations (creuser),Livraison des matériaux|7|-1|4|0|0
+Livraison des huisseries|7|Commande des huisseries|5|-1|3|0|0
+Pose des murs|10|Fondations (coulage dalle)|-1|-1|5|0|0
+Pose charpente et toit|7|Pose des murs|-1|-1|6|0|0
+Électricité et plomberie|4|Pose des murs,Pose charpente et toit|-1|-1|7|0|0
+Pose des huisseries|2|Livraison des huisseries,Pose des murs|-1|-1|6|0|0
+Livraison|0|Électricité et plomberie,Pose des huisseries|-1|-1|8|0|0
+FIN|0|Livraison|-1|-1|9|0|0
